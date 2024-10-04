@@ -1,0 +1,21 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="32dp"
+    android:height="32dp"
+    android:viewportWidth="32"
+    android:viewportHeight="32">
+
+    <!-- Outer Circle for Gauge -->
+    <path
+        android:pathData="M16,0C7.163,0 0,7.163 0,16C0,24.837 7.163,32 16,32C24.837,32 32,24.837 32,16C32,7.163 24.837,0 16,0Z"
+        android:fillColor="#000000"/>
+
+    <!-- Inner Circle for Gauge Dial -->
+    <path
+        android:pathData="M16,4C9.373,4 4,9.373 4,16C4,22.627 9.373,28 16,28C22.627,28 28,22.627 28,16C28,9.373 22.627,4 16,4Z"
+        android:fillColor="#FFFFFF"/>
+
+    <!-- Needle or Indicator -->
+    <path
+        android:pathData="M15.5,16L15.5,7.5C15.5,7.224 15.724,7 16,7C16.276,7 16.5,7.224 16.5,7.5L16.5,16H22C22.276,16 22.5,16.224 22.5,16.5C22.5,16.776 22.276,17 22,17H16.5L16.5,25.5C16.5,25.776 16.276,26 16,26C15.724,26 15.5,25.776 15.5,25.5V17H10C9.724,17 9.5,16.776 9.5,16.5C9.5,16.224 9.724,16 10,16H15.5Z"
+        android:fillColor="#000000"/>
+</vector>
