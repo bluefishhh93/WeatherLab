@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1021407063297",
+    "project_id": "weather-lab-9642c",
+    "storage_bucket": "weather-lab-9642c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1021407063297:android:c0fad63802013c4f71ff00",
+        "android_client_info": {
+          "package_name": "com.example.weatherlab"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDsz0_XPzLm4lJ-557fLvQ4OnoXdHy2S68"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

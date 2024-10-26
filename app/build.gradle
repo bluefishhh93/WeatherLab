@@ -19,9 +19,21 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField("String", "WEATHER_API_KEY", "\"${getApiKey()}\"")
-
+        // Load API keys from local.properties
+        buildConfigField("String", "WEATHER_API_KEY", "\"${getLocalProperty("WEATHER_API_KEY")}\"")
+        buildConfigField("String", "WEB_CLIENT_ID", "\"${getLocalProperty("WEB_CLIENT_ID")}\"")
     }
+
+//    buildscript {
+//        repositories {
+//            google()
+//            mavenCentral()
+//        }
+//        dependencies {
+//            classpath 'com.google.gms:google-services:4.3.15'
+//        }
+//    }
+
 
     buildTypes {
         release {
@@ -35,15 +47,13 @@ android {
     }
 }
 
-def getApiKey() {
+def getLocalProperty(String key) {
     def properties = new Properties()
     properties.load(project.rootProject.file("local.properties").newDataInputStream())
-    return properties.getProperty("WEATHER_API_KEY")
+    return properties.getProperty(key)
 }
 
-
 dependencies {
-
     implementation libs.appcompat
     implementation libs.material
     implementation libs.activity
@@ -58,4 +68,14 @@ dependencies {
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core
+
+    // Import the BoM for the Firebase platform
+    implementation(platform(libs.firebase.bom))
+
+    // Add the dependency for the Firebase Authentication library
+    implementation(libs.firebase.auth)
+
+    // Also add the dependency for the Google Play services library
+    implementation(libs.play.services.auth)
 }
+apply plugin: 'com.google.gms.google-services'

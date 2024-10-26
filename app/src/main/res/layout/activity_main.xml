@@ -25,6 +25,15 @@
             android:layout_height="wrap_content"
             android:padding="16dp">
 
+            <!-- SignInButton (Login Button) positioned above the search inputs -->
+            <com.google.android.gms.common.SignInButton
+                android:id="@+id/signInButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!-- EditText for city input -->
             <EditText
                 android:id="@+id/etCity"
                 android:layout_width="0dp"
@@ -34,16 +43,18 @@
                 android:textColorHint="#CCCCCC"
                 app:layout_constraintEnd_toStartOf="@+id/btnGetWeather"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@id/signInButton" />
 
+            <!-- Search Button -->
             <Button
                 android:id="@+id/btnGetWeather"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Search"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="@id/etCity" />
 
+            <!-- Other components (unchanged) -->
             <TextView
                 android:id="@+id/tvCity"
                 android:layout_width="wrap_content"
@@ -101,6 +112,38 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/profileInfoLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:orientation="vertical"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/llAdditionalInfo">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/profileImage"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="40dp"
+                    app:shapeAppearanceOverlay="@style/roundedImageView"/>
+
+                <TextView
+                    android:id="@+id/nameTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="10dp"/>
+
+                <TextView
+                    android:id="@+id/mailTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="10dp"/>
+
+            </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
