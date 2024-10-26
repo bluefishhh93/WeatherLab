@@ -19,11 +19,14 @@ import com.example.weatherlab.databinding.ActivityMainBinding;
 import com.example.weatherlab.model.UserData;
 import com.example.weatherlab.model.WeatherData;
 import com.example.weatherlab.model.WeatherService;
+import com.example.weatherlab.repository.UserRepository;
 import com.example.weatherlab.repository.WeatherRepository;
 import com.example.weatherlab.utils.AudioManager;
 import com.example.weatherlab.utils.AuthManager;
 import com.example.weatherlab.utils.LocationManager;
 import com.example.weatherlab.utils.UIManager;
+import com.example.weatherlab.viewmodel.UserViewModel;
+import com.example.weatherlab.viewmodel.UserViewModelFactory;
 import com.example.weatherlab.viewmodel.WeatherViewModel;
 import com.example.weatherlab.viewmodel.WeatherViewModelFactory;
 import com.google.firebase.FirebaseApp;
@@ -31,6 +34,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
     private WeatherViewModel weatherViewModel;
+    private UserViewModel userViewModel;
     private LocationManager locationManager;
     private AuthManager authManager;
     private AudioManager audioManager;
@@ -41,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
                 if (result.getResultCode() == RESULT_OK && result.getData() != null) {
-                    authManager.handleSignInResult(result.getData());
+                    userViewModel.handleSignInResult(result.getData());
                 }
             });
 
@@ -70,10 +74,16 @@ public class MainActivity extends AppCompatActivity {
     private void initializeServices() {
         FirebaseApp.initializeApp(this);
         WeatherService weatherService = ApiConfig.createWeatherService();
-        WeatherRepository repository = new WeatherRepository(weatherService);
-        WeatherViewModelFactory factory = new WeatherViewModelFactory(repository);
-        weatherViewModel = new ViewModelProvider(this, factory).get(WeatherViewModel.class);
+        WeatherRepository weatherRepository = new WeatherRepository(weatherService);
+        WeatherViewModelFactory weatherFactory = new WeatherViewModelFactory(weatherRepository);
+        weatherViewModel = new ViewModelProvider(this, weatherFactory).get(WeatherViewModel.class);
+
+        authManager = new AuthManager(this);
+        UserViewModelFactory userFactory = new UserViewModelFactory(authManager);
+        userViewModel = new ViewModelProvider(this, userFactory).get(UserViewModel.class);
+
         binding.setViewModel(weatherViewModel);
+        binding.setUserViewModel(userViewModel);
     }
 
     private void initializeManagers() {
@@ -91,19 +101,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        authManager = new AuthManager(this);
-        authManager.setAuthCallback(new AuthManager.AuthCallback() {
+        userViewModel.setAuthCallback(new UserRepository.AuthCallback() {
             @Override
             public void onAuthSuccess(FirebaseUser user) {
-                if (user != null && user.getPhotoUrl() != null) {
-                    UserData userData = new UserData(
-                            user.getDisplayName(),
-                            user.getEmail(),
-                            user.getPhotoUrl().toString()
-                    );
-                    binding.setUserData(userData);
-                    uiManager.showToast("Signed in successfully!");
-                }
+                uiManager.showToast("Signed in successfully!");
             }
 
             @Override
@@ -112,13 +113,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
         audioManager = new AudioManager(this);
         uiManager = new UIManager(this, binding);
+
+
     }
 
     private void setupClickListeners() {
         binding.signInButton.setOnClickListener(v ->
-                authManager.signIn(signInLauncher));
+                userViewModel.signIn(signInLauncher));
 
         binding.btnGetWeather.setOnClickListener(v -> {
             String city = binding.etCity.getText().toString().trim();

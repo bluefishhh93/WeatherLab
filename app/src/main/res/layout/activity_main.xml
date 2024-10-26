@@ -8,11 +8,11 @@
             name="viewModel"
             type="com.example.weatherlab.viewmodel.WeatherViewModel" />
         <variable
+            name="userViewModel"
+            type="com.example.weatherlab.viewmodel.UserViewModel" />
+        <variable
             name="weatherData"
             type="com.example.weatherlab.model.WeatherData" />
-        <variable
-            name="userData"
-            type="com.example.weatherlab.model.UserData" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -159,7 +159,7 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="40dp"
                         app:shapeAppearanceOverlay="@style/roundedImageView"
-                        app:imageUrl="@{userData.photoUrl}"/>
+                        app:imageUrl="@{userViewModel.userData.photoUrl}"/>
 
                     <TextView
                         android:id="@+id/nameTV"
@@ -167,7 +167,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="10dp"
-                        android:text="@{userData.displayName}"/>
+                        android:text="@{userViewModel.userData.displayName}"/>
 
                     <TextView
                         android:id="@+id/mailTV"
@@ -175,7 +175,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="10dp"
-                        android:text="@{userData.email}"/>
+                        android:text="@{userViewModel.userData.email}"/>
 
                 </LinearLayout>
 
