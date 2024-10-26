@@ -1,9 +1,10 @@
-package com.example.weatherlab.viewmodel;
+package com.example.weatherlab.viewmodel.factory;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import com.example.weatherlab.repository.WeatherRepository;
+import com.example.weatherlab.viewmodel.WeatherViewModel;
 
 public class WeatherViewModelFactory implements ViewModelProvider.Factory {
     private final WeatherRepository repository;

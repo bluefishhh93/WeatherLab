@@ -14,10 +14,11 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.databinding.DataBindingUtil;
 
+import com.example.weatherlab.adapter.WeatherInfoAdapter;
 import com.example.weatherlab.api.ApiConfig;
 import com.example.weatherlab.databinding.ActivityMainBinding;
-import com.example.weatherlab.model.UserData;
 import com.example.weatherlab.model.WeatherData;
+import com.example.weatherlab.model.WeatherInfoItem;
 import com.example.weatherlab.model.WeatherService;
 import com.example.weatherlab.repository.UserRepository;
 import com.example.weatherlab.repository.WeatherRepository;
@@ -26,11 +27,14 @@ import com.example.weatherlab.utils.AuthManager;
 import com.example.weatherlab.utils.LocationManager;
 import com.example.weatherlab.utils.UIManager;
 import com.example.weatherlab.viewmodel.UserViewModel;
-import com.example.weatherlab.viewmodel.UserViewModelFactory;
+import com.example.weatherlab.viewmodel.factory.UserViewModelFactory;
 import com.example.weatherlab.viewmodel.WeatherViewModel;
-import com.example.weatherlab.viewmodel.WeatherViewModelFactory;
+import com.example.weatherlab.viewmodel.factory.WeatherViewModelFactory;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseUser;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private WeatherViewModel weatherViewModel;
@@ -61,6 +65,8 @@ public class MainActivity extends AppCompatActivity {
         setupClickListeners();
         setupWindowInsets();
         setupObservers();
+        setupRecyclerView();
+        setupFab();
 
         if (locationManager.checkLocationPermission()) {
             locationManager.getCurrentLocation();
@@ -152,6 +158,7 @@ public class MainActivity extends AppCompatActivity {
         weatherViewModel.isLoading().observe(this, isLoading -> {
             // Update UI loading state
             binding.progressBar.setVisibility(isLoading ? View.VISIBLE : View.GONE);
+            binding.fabRefresh.setVisibility(isLoading ? View.GONE : View.VISIBLE);
         });
         weatherViewModel.getCurrentWeatherSound().observe(this, audioManager::playWeatherSound);
     }
@@ -159,6 +166,36 @@ public class MainActivity extends AppCompatActivity {
     private void updateUI(WeatherData weatherData) {
         binding.setWeatherData(weatherData);
         uiManager.updateBackground(weatherData.getWeatherMain());
+        uiManager.updateStatusBarColor(weatherData.getWeatherMain());
+    }
+
+    private void setupRecyclerView() {
+        WeatherInfoAdapter adapter = new WeatherInfoAdapter();
+        binding.rvWeatherInfo.setAdapter(adapter);
+        weatherViewModel.getWeatherData().observe(this, weatherData -> {
+            if (weatherData != null) {
+                List<WeatherInfoItem> infoItems = new ArrayList<>();
+                infoItems.add(new WeatherInfoItem(R.drawable.humidity, String.format("%.0f%%", weatherData.getHumidity()), "Humidity"));
+                infoItems.add(new WeatherInfoItem(R.drawable.wind, String.format("%.1f m/s", weatherData.getWindSpeed()), "Wind Speed"));
+                infoItems.add(new WeatherInfoItem(R.drawable.pressure, String.format("%.0f hPa", weatherData.getPressure()), "Pressure"));
+                adapter.submitList(infoItems);
+            }
+        });
+    }
+
+    private void setupFab() {
+        binding.fabRefresh.setOnClickListener(v -> {
+            if (locationManager.checkLocationPermission()) {
+                locationManager.getCurrentLocation();
+            } else {
+                String city = binding.etCity.getText().toString().trim();
+                if (!city.isEmpty()) {
+                    weatherViewModel.getWeatherByCity(city);
+                } else {
+                    uiManager.showSnackbar("Please enter a city name or grant location permission");
+                }
+            }
+        });
     }
 
     @Override

@@ -1,10 +1,11 @@
-package com.example.weatherlab.viewmodel;
+package com.example.weatherlab.viewmodel.factory;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import com.example.weatherlab.repository.UserRepository;
 import com.example.weatherlab.utils.AuthManager;
+import com.example.weatherlab.viewmodel.UserViewModel;
 
 public class UserViewModelFactory implements ViewModelProvider.Factory {
     private final AuthManager authManager;
