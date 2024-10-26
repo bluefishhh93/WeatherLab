@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Weather Lab</string>
     <string name="client_id">1021407063297-ace8pnhal7v2lmjv1n9lvlech33k96eq.apps.googleusercontent.com</string>
+    <string name="humidity">Humidity</string>
+    <string name="wind_speed">Wind Speed</string>
+    <string name="pressure">Pressure</string>
 </resources>
